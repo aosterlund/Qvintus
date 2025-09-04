@@ -1,0 +1,39 @@
+h1 {
+    text-align: center;
+}
+
+.loginform {
+    padding: 100px 100px 100px 100px!important;
+}
+
+.loginpagelink {
+    padding: 5px;
+}
+
+#editaccountform {
+    text-align: center;
+}
+
+.userlist {
+    text-align: center;
+}
+
+#registerform {
+    text-align: center;
+}
+
+.button {
+    padding: 5px;
+    margin: 5px;
+    color: #fff;
+    background-color: #000;
+    text-decoration: none;
+    border: 3px solid #000;
+    border-radius: 5px;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: #fff;
+    color: #000
+}
