@@ -1,5 +1,5 @@
 <?php
-    include "includes/header.php";
+/*    include "includes/header.php";
 
     if (isset($_POST['login'])) {
         $logInReturn = $user->login();
@@ -10,7 +10,7 @@
         else {
             echo $logInReturn;
         }
-    }
+    }*/
 ?>
 
 <!DOCTYPE html>

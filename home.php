@@ -1,5 +1,5 @@
 <?php
-    include "includes/header.php";
+   /* include "includes/header.php";
 
     if (!$user->checkUserLogInStatus()) {
         $user->redirect("index.php");
@@ -11,6 +11,7 @@
 
     echo "<h1>Welcome ".$_SESSION['user_name'].".</h1>";
     echo "<p>Your ID is ".$_SESSION['user_id']." and your role is ".$_SESSION['user_role'].".</p>"
+    */
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +24,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Homepagekjhjj</title>
+
+    <div style="height: 1200px; width:full-width ; background-color:gray; ">
+        <div>
+    <label class="margin 0 auto" for="look-up-txt">Vad letar du efter?</label><br>
+    <input type="text" class="look-up-txt" name="look-up-txt">
+    </div>
+    </div>
 </head>
 <body>
     
