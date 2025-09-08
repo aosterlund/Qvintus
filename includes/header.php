@@ -1,13 +1,46 @@
 <?php
-	include_once "includes/class.user.php";
-	include_once "includes/config.php";
+require_once 'includes/config.php';
+require_once 'includes/class.user.php';
+require_once 'includes/class.book.php';
+require_once 'includes/config.php';
+$user = new User($pdo);
+$book = new Book($pdo);
 
-	if (isset($_POST['logout'])) {
-		if ($user->logout()) {
-			$user->redirect("index.php");
-		}
-	}
-	?>
+if(isset($_GET['logout'])) {
+	$user->logout();
+}
+
+$menuLinks = array(
+    array(
+        "title" => "Hem",
+        "url" => "index.php"
+		),
+		array(
+				"title" => "Böcker",
+				"url" => "books.php"
+		),
+		array(
+				"title" => "Exklusivt",
+				"url" => "exclusives.php"
+		),
+		array(
+				"title" => "Om oss",
+				"url" => "about-us.php"
+		),
+		array(
+				"title" => "Logga in",
+				"url" => "login.php"
+		)
+	);
+$adminMenuLinks = array(
+    array(
+        "title" => "Admin panel",
+        "url" => "admin.php"
+		)
+);
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
