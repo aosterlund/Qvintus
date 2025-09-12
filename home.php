@@ -24,14 +24,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepagekjhjj</title>
+    <title>Homepage</title>
 
-    <div style="height: 1200px; width:full-width ; background-color:gray; ">
-        <div>
-    <label class="margin 0 auto" for="look-up-txt">Vad letar du efter?</label><br>
-    <input type="text" class="look-up-txt" name="look-up-txt">
-    </div>
-    </div>
+   
 </head>
 <body>
     

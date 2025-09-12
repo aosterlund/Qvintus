@@ -43,6 +43,14 @@
 
     </form>
 <div>
+
+ <div style="height: 1200px; width:full-width ; background-color:gray; ">
+        <div>
+    <label class="margin 0 auto" for="look-up-txt">Vad letar du efter?</label><br>
+    <input type="text" class="look-up-txt" name="look-up-txt">
+    </div>
+    </div>
+ <textarea> knkregkresgjlsegkslegrejsl</textarea>
 </body>
 </html>
 
