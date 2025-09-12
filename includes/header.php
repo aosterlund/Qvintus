@@ -1,75 +1,51 @@
 <?php
-require_once 'includes/config.php';
-require_once 'includes/class.user.php';
-require_once 'includes/class.book.php';
-require_once 'includes/config.php';
-$user = new User($pdo);
-$book = new Book($pdo);
+require_once 'config.php';
+require_once 'class.user.php';
 
-if(isset($_GET['logout'])) {
-	$user->logout();
+$user = new USER($conn);
+
+if (isset($_GET['logout'])) {
+    $user->logout();
 }
 
-$menuLinks = array(
-    array(
-        "title" => "Hem",
-        "url" => "index.php"
-		),
-		array(
-				"title" => "Böcker",
-				"url" => "books.php"
-		),
-		array(
-				"title" => "Exklusivt",
-				"url" => "exclusives.php"
-		),
-		array(
-				"title" => "Om oss",
-				"url" => "about-us.php"
-		),
-		array(
-				"title" => "Logga in",
-				"url" => "login.php"
-		)
-	);
+<a href="front_page.php" class="button">Hem</a>
+<a href="books.php" class="button">Böcker</a>
+<a href="exclusives.php" class="button">Exklusivt</a>
+<a href="about-us.php" class="button">Om oss</a>
+<a href="login.php" class="button">Logga in</a>
+
 $adminMenuLinks = array(
-    array(
-        "title" => "Admin panel",
-        "url" => "admin.php"
-		)
+    array("title" => "Adminpanel", "url" => "admin.php")
 );
 ?>
-
-
 <!DOCTYPE html>
-<html>
+<html lang="sv">
 <head>
-<link rel="stylesheet" href="css/style.css">
-    <script src="js/script.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In System</title>
+    <title>Qvintus - Inloggningssystem</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- other head stuff -->
 </head>
 <body>
-<?php
-if ($user->checkUserLogInStatus()) {
-?>
+<header>
+    <nav id="navigation">
+        <a href="../index.php"> <!-- adjust path if needed -->
+           <img src="images/Qvintus_Logo.png" style="height: 60px; width: 120px;">
 
-<div id="navigation">
-	<a href="home.php" class="button">Home</a>
-	<?php
-	if ($user->checkUserRole(50)) {
-		echo "<a href='admin.php' class='button'>Admin</a>";
-	}
-	?>
-	<br>
-	<br>
-	<form method="post" action="">
-		<input type="submit" value="Log out" name="logout" class="button">
-	</form>
-</div>
-<?php }?>
-</body>
+        </a>
+        <?php if ($user->checkUserLogInStatus()): ?>
+            <a href="../home.php" class="button">Hem</a>
+            <?php if ($user->checkUserRole(50)): ?>
+                <a href="../admin.php" class="button">Adminpanel</a>
+            <?php endif; ?>
+            <form method="post" action="" style="display: inline;">
+                <input type="submit" value="Logga ut" name="logout" class="button">
+            </form>
+        <?php else: ?>
+            <?php foreach ($menuLinks as $link): ?>
+                <a href="../<?= $link['url'] ?>" class="button"><?= $link['title'] ?></a>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </nav>
+
+</header>

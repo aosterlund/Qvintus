@@ -1,21 +1,22 @@
 <?php
-	$servername = "127.0.0.1";
-	$username = "root";
-	$password = "";
+$servername = "127.0.0.1";
+$username = "root";
+$password = "";
 
-	try {
-	  $conn = new PDO("mysql:host=$servername;dbname=2023_login_system;charset=utf8mb4", $username, $password);
-	  // set the PDO error mode to exception
-	  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	  echo "Connected successfully<br>";
-	} catch(PDOException $e) {
-	  echo "Connection failed: " . $e->getMessage();
-	}
-	
-	if (!isset($_SESSION)) {
-        session_start();
-    }
+try {
+  $conn = new PDO("mysql:host=$servername;dbname=2024_qvintus;charset=utf8mb4", $username, $password);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  //echo "Connected successfully<br>";
+} catch(PDOException $e) {
+  echo "Connection failed: " . $e->getMessage();
+}
 
-    $user = new USER($conn);
+if (!isset($_SESSION)) {
+    session_start();
+}
 
+// Include the USER class file
+require_once 'class.user.php';
+
+$user = new USER($conn);
 ?>
