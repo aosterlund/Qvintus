@@ -23,13 +23,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logga In</title>
+    <title>Log In</title>
 </head>
 <body>
 <div class="text-center">
     <form method="post"id="loginform">
         <label for="username">Username</label><br>
-        <input type="text" id="username" name="username"><br><br>
+        <input type="text" id="username" name="username"><br>
+
+<label for="email">Email</label><br>
+    <input type="text" id="email" name="email"><br>
 
         <label for="password">Password</label><br>
         <input type="password" id="password" name="password"><br><br>

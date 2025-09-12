@@ -1,4 +1,6 @@
 <?php
+	include_once "includes/class.user.php";
+	include_once "includes/config.php";
     include "includes/header.php";
 
     if (!$user->checkUserLogInStatus()) {
@@ -9,8 +11,8 @@
         $user->logout();
     }
 
-    echo "<h1>Welcome ".$_SESSION['user_name'].".</h1>";
-    echo "<p>Your ID is ".$_SESSION['user_id']." and your role is ".$_SESSION['user_role'].".</p>"
+    echo "<h1>Welcome ".$_SESSION['u_name'].".</h1>";
+    echo "<p>Your ID is ".$_SESSION['u_id']." and your role is ".$_SESSION['u_role_fk'].".</p>"
 ?>
 
 <!DOCTYPE html>

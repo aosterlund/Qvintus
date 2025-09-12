@@ -1,14 +1,15 @@
 <?php
-require_once 'includes/config.php';
 require_once 'includes/class.user.php';
-require_once 'includes/class.book.php';
 require_once 'includes/config.php';
-$user = new User($pdo);
-$book = new Book($pdo);
+//require_once 'includes/class.book.php';
+//$user = new User($pdo);
+//$book = new Book($pdo);
 
-if(isset($_GET['logout'])) {
-	$user->logout();
-}
+	if (isset($_POST['logout'])) {
+		if ($user->logout()) {
+			$user->redirect("index.php");
+		}
+	}
 
 $menuLinks = array(
     array(
@@ -51,7 +52,7 @@ $adminMenuLinks = array(
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In System</title>
+    <title>Header</title>
 </head>
 <body>
 <?php
@@ -61,7 +62,7 @@ if ($user->checkUserLogInStatus()) {
 <div id="navigation">
 	<a href="home.php" class="button">Home</a>
 	<?php
-	if ($user->checkUserRole(50)) {
+	if ($user->checkUserRole(500)) {
 		echo "<a href='admin.php' class='button'>Admin</a>";
 	}
 	?>

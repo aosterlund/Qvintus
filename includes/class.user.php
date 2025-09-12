@@ -22,7 +22,7 @@ class user {
         if (isset($_POST['register'])) {
             
             $cleanName = $this->cleanInput($_POST['username']);
-            $stmt_checkIfUserExist = $this->conn->prepare("SELECT * FROM user_table WHERE user_name = :uname OR user_email = :email");
+            $stmt_checkIfUserExist = $this->conn->prepare("SELECT * FROM table_users WHERE u_name = :uname OR u_email = :email");
             $stmt_checkIfUserExist->bindValue(":uname", $cleanName, PDO::PARAM_STR);
             $stmt_checkIfUserExist->bindValue(":email", $cleanEmail, PDO::PARAM_STR);
             $stmt_checkIfUserExist->execute();
@@ -31,13 +31,13 @@ class user {
         $userNameMatch = $stmt_checkIfUserExist->fetch();
 
         if (!empty($userNameMatch)) {
-            if ($userNameMatch['user_name'] == $cleanName) {
+            if ($userNameMatch['u_name'] == $cleanName) {
                 $this->errorMessage .= " | Username is already taken";
                 $error=1;
             }
 
             if (!empty($userNameMatch)) {
-                if ($userNameMatch['user_email'] == $cleanEmail) {
+                if ($userNameMatch['u_email'] == $cleanEmail) {
                     $this->errorMessage .= " | Email is already in use";
                     $error=1;
                 }
@@ -81,11 +81,11 @@ class user {
         $cleanEmail = $this->cleanInput($_POST['email']);
         //Encrypt password with the password hash-function
         $encryptedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $stmt_insertUser = $this->conn->prepare("INSERT INTO user_table (user_name, user_email, user_password, user_role_fk, user_status_fk) 
-		VALUES (:user_name, :user_email, :user_password, 1, 1)");
-		$stmt_insertUser->bindParam(':user_name', $cleanName, PDO::PARAM_STR);
+        $stmt_insertUser = $this->conn->prepare("INSERT INTO table_users (u_name, u_email, u_password, u_status)
+		VALUES (:u_name, :user_email, :u_password, 1)");
+		$stmt_insertUser->bindParam(':u_name', $cleanName, PDO::PARAM_STR);
 		$stmt_insertUser->bindParam(':user_email', $cleanEmail, PDO::PARAM_STR);
-		$stmt_insertUser->bindParam(':user_password', $encryptedPassword, PDO::PARAM_STR);
+		$stmt_insertUser->bindParam(':u_password', $encryptedPassword, PDO::PARAM_STR);
 		$check = $stmt_insertUser->execute();
 
         if ($check) {
@@ -100,7 +100,7 @@ class user {
     public function logIn() {
         $cleanName = $this->cleanInput($_POST['username']);
 
-        $stmt_checkIfUserExist = $this->conn->prepare("SELECT * FROM user_table WHERE user_name = :uname OR user_email = :email");
+        $stmt_checkIfUserExist = $this->conn->prepare("SELECT * FROM table_users WHERE u_name = :uname OR u_email = :email");
         $stmt_checkIfUserExist->bindValue(":uname", $cleanName, PDO::PARAM_STR);
         $stmt_checkIfUserExist->bindValue(":email", $cleanName, PDO::PARAM_STR);
         $stmt_checkIfUserExist->execute();
@@ -111,12 +111,12 @@ class user {
             return $this->errorMessage;
         }
 
-        $checkPasswordMatch = password_verify($_POST["password"], $userNameMatch["user_password"]);
+        $checkPasswordMatch = password_verify($_POST["password"], $userNameMatch["u_password"]);
 
         if($checkPasswordMatch == true) {
-            $_SESSION['user_name'] = $userNameMatch['user_name'];
-            $_SESSION['user_role'] = $userNameMatch['user_role_fk'];
-            $_SESSION['user_id'] = $userNameMatch['user_id'];
+            $_SESSION['u_name'] = $userNameMatch['u_name'];
+            $_SESSION['u_role_fk'] = $userNameMatch['u_role_fk'];
+            $_SESSION['u_id'] = $userNameMatch['u_id'];
             return "Success!";
          }
          
@@ -127,7 +127,7 @@ class user {
     }
 
     public function checkUserLogInStatus() {
-        if (isset($_SESSION['user_id'])){
+        if (isset($_SESSION['u_id'])){
             return true;
         }
 
@@ -137,18 +137,23 @@ class user {
     }
 
     public function checkUserRole($req) {
-        $stmt_checkRoleLevel = $this->conn->prepare("SELECT * FROM role_table WHERE role_id = :user_role");
-		$stmt_checkRoleLevel->bindValue(':user_role', $_SESSION['user_role'], PDO::PARAM_STR);
+        $stmt_checkRoleLevel = $this->conn->prepare("SELECT * FROM table_roles WHERE r_id = :u_role_fk");
+        $stmt_checkRoleLevel->bindValue(':u_role_fk', $_SESSION['u_role_fk'], PDO::PARAM_STR);
         $stmt_checkRoleLevel->execute();
         $currentUserRoleInfo = $stmt_checkRoleLevel->fetch();
 
-        if ($currentUserRoleInfo["role_level"] >= $req) {
-            return true;
-        }
+    // Check if fetch() returned false
+    if ($currentUserRoleInfo === false) {
+        $this->errorMessage = "Role not found in the database.";
+        return false;
+    }
 
-        else {
-            return false;
-        }
+    // Fix the typo in the column name
+    if ($currentUserRoleInfo["r_level"] >= $req) {
+        return true;
+    } else {
+        return false;
+    }
     }
 
     public function redirect($url) {
@@ -171,17 +176,16 @@ class user {
 
         if (isset($_POST['password']) && $_POST['password'] != "") {
             $encryptedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $editUserInfo = $this->conn->prepare("UPDATE user_table SET user_email = :user_email, user_password = :user_password WHERE user_id = :user_id");
-            $editUserInfo->bindParam(":user_email", $cleanEmail, PDO::PARAM_STR);
-            $editUserInfo->bindParam(":user_password", $cleanPassword, PDO::PARAM_STR);
-            $editUserInfo->bindParam(":user_id", $_SESSION['user_id'], PDO::PARAM_STR);
+            $editUserInfo = $this->conn->prepare("UPDATE table_users SET  u_password = :u_password WHERE u_id = :u_id");
+            $editUserInfo->bindParam(":u_password", $cleanPassword, PDO::PARAM_STR);
+            $editUserInfo->bindParam(":u_id", $_SESSION['u_id'], PDO::PARAM_STR);
             $check = $editUserInfo->execute();
         }
 
         else {
-            $editUserInfo = $this->conn->prepare("UPDATE user_table SET user_email = :user_email WHERE user_id = :user_id");
-            $editUserInfo->bindParam(":user_email", $cleanEmail, PDO::PARAM_STR);
-            $editUserInfo->bindParam(":user_id", $_SESSION['user_id'], PDO::PARAM_STR);
+            $editUserInfo = $this->conn->prepare("UPDATE table_users SET u_email = :u_email WHERE u_id = :u_id");
+            $editUserInfo->bindParam(":u_email", $cleanEmail, PDO::PARAM_STR);
+            $editUserInfo->bindParam(":u_id", $_SESSION['u_id'], PDO::PARAM_STR);
             $check = $editUserInfo->execute();
         }
         if ($check) {
@@ -190,8 +194,8 @@ class user {
     }
 
     public function getUserInfo($uid) {
-        $stmt_userInfoQuery = $this->conn->prepare("SELECT * FROM user_table WHERE user_id = :user_id");
-		$stmt_userInfoQuery->bindParam(':user_id', $uid, PDO::PARAM_STR);
+        $stmt_userInfoQuery = $this->conn->prepare("SELECT * FROM table_users WHERE u_id = :u_id");
+		$stmt_userInfoQuery->bindParam(':u_id', $uid, PDO::PARAM_STR);
 		$stmt_userInfoQuery->execute();
         $userInfo = $stmt_userInfoQuery->fetch();
         return $userInfo;
@@ -199,7 +203,7 @@ class user {
 
     public function searchUser() {
         $cleanParam = $this->cleanInput($_POST['searchinput']);
-        $searchUserQuery = $this->conn->prepare("SELECT * FROM user_table WHERE user_name = :searchparam");
+        $searchUserQuery = $this->conn->prepare("SELECT * FROM table_users WHERE u_name = :searchparam");
 		$searchUserQuery->bindParam(':searchparam', $cleanParam, PDO::PARAM_STR);
         $searchUserQuery->execute();
         return $searchUserQuery;
