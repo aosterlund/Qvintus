@@ -4,9 +4,18 @@ require_once 'class.user.php';
 
 $user = new USER($conn);
 
+$menuLinks = array(
+    array("title" => "Hem", "url" => "front_page.php"),
+    array("title" => "Böcker", "url" => "books.php"),
+    array("title" => "Exklusivt", "url" => "exclusives.php"),
+    array("title" => "Om oss", "url" => "about-us.php"),
+    array("title" => "Logga in", "url" => "login.php")
+);
+
 if (isset($_GET['logout'])) {
     $user->logout();
 }
+?>
 
 <a href="front_page.php" class="button">Hem</a>
 <a href="books.php" class="button">Böcker</a>
@@ -14,6 +23,7 @@ if (isset($_GET['logout'])) {
 <a href="about-us.php" class="button">Om oss</a>
 <a href="login.php" class="button">Logga in</a>
 
+<?php
 $adminMenuLinks = array(
     array("title" => "Adminpanel", "url" => "admin.php")
 );
