@@ -1,6 +1,6 @@
 <?php
-    include "includes/header.php";
-    require_once "includes/db.php"; // Your PDO connection
+include "includes/header.php";
+require_once "includes/db.php"; // Your PDO connection
 ?>
 
 <!DOCTYPE html>
@@ -19,44 +19,56 @@
 <div class="main-container">
 
 <?php
-    $search = "";
-    $results = [];
+$search = "";
+$results = [];
 
-    if (isset($_GET['search'])) {
-        $search = $_GET['search'];
-        $like = "%" . $search . "%";
+// Search functionality
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $like = "%" . $search . "%";
 
-        $stmt = $conn->prepare("
-            SELECT 
-                t_books.book_id,
-                t_books.title,
-                t_books.description,
-                t_books.cover_image,
-                t_books.is_rare,
-                t_genres.genre_name
-            FROM t_books
-            LEFT JOIN t_book_genres ON t_books.book_id = t_book_genres.book_id_fk
-            LEFT JOIN t_genres ON t_book_genres.genre_id_fk = t_genres.genre_id
-            WHERE (t_books.title LIKE :like OR t_genres.genre_name LIKE :like2)
-              AND t_books.visibility = 1
-        ");
-        $stmt->bindParam(":like", $like);
-        $stmt->bindParam(":like2", $like);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        // Default: show latest 8 visible books
-        $stmt = $conn->prepare("
-            SELECT 
-                book_id, title, description, cover_image, is_rare 
-            FROM t_books 
-            WHERE visibility = 1 
-            ORDER BY date_published DESC 
-            LIMIT 8
-        ");
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    $stmt = $conn->prepare("
+        SELECT 
+            tb.book_id,
+            tb.book_title AS title,
+            tb.book_desc AS description,
+            tb.book_language,
+            tb.book_release_date,
+            tb.book_pages,
+            tb.book_price,
+            tb.book_rarity AS book_rarity,
+            tg.genre_name
+        FROM table_books tb
+        LEFT JOIN t_book_genres tbg ON tb.book_id = tbg.book_id_fk
+        LEFT JOIN t_genres tg ON tbg.genre_id_fk = tg.genre_id
+        WHERE (tb.book_title LIKE :like OR tg.genre_name LIKE :like2)
+          AND tb.status_fk = 1
+    ");
+    $stmt->bindParam(":like", $like);
+    $stmt->bindParam(":like2", $like);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} else {
+    // Default: latest 8 visible books
+    $stmt = $conn->prepare("
+        SELECT 
+            book_id,
+            book_title AS title,
+            book_desc AS description,
+            book_language,
+            book_release_date,
+            book_pages,
+            book_price,
+            book_rarity AS book_rarity
+        FROM table_books
+        WHERE status_fk = 1
+        ORDER BY book_release_date DESC
+        LIMIT 8
+    ");
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!-- 📚 Search Form -->
@@ -74,7 +86,7 @@
         <div class="card-grid">
             <?php foreach ($results as $book): ?>
                 <div class="card">
-                    <?php if (!empty($book['is_rare'])): ?>
+                    <?php if (!empty($book['book_rarity'])): ?>
                         <div class="rare-badge">RARE</div>
                     <?php endif; ?>
                     <img src="<?= !empty($book['cover_image']) ? htmlspecialchars($book['cover_image']) : 'images/placeholder.jpg' ?>" alt="<?= htmlspecialchars($book['title']) ?>">
@@ -99,9 +111,13 @@
     <div class="swiper-wrapper">
         <?php
         $stmt = $conn->prepare("
-            SELECT title, description, cover_image 
-            FROM t_books 
-            WHERE is_rare = 1 AND visibility = 1
+            SELECT 
+                book_id,
+                book_title AS title,
+                book_desc AS description,
+                book_rarity AS book_rarity
+            FROM table_books
+            WHERE book_rarity = 1 AND status_fk = 1
             LIMIT 20
         ");
         $stmt->execute();
@@ -109,7 +125,15 @@
 
         if (!empty($rare_books)) {
             foreach ($rare_books as $book) {
-                $cover = !empty($book['cover_image']) ? htmlspecialchars($book['cover_image']) : 'images/placeholder.jpg';
+                // Construct image path from the images folder
+                // Example: images/book_{id}.jpg
+                $cover = "images/book_" . $book['book_id'] . ".jpg";
+                
+                // If the image file does not exist, use a placeholder
+                if (!file_exists($cover)) {
+                    $cover = "images/placeholder.jpg";
+                }
+
                 $title = htmlspecialchars($book['title']);
                 $desc = htmlspecialchars(mb_strimwidth($book['description'], 0, 100, '...'));
 
@@ -135,21 +159,19 @@
 <h3 class="mt-5">Populära genrer</h3>
 <div class="swiper">
     <div class="swiper-wrapper">
-        <?php
-        // Fetch popular genres
-        $stmt = $conn->prepare("
-            SELECT genre_name 
-            FROM t_genres 
-            WHERE display = 1
-            LIMIT 20
-        ");
+    <?php
+    $stmt = $conn->prepare("
+        SELECT genre_name 
+        FROM table_genres
+        LIMIT 20
+    ");
+
         $stmt->execute();
         $popular_genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($popular_genres)) {
             foreach ($popular_genres as $genre) {
                 $genre_name = htmlspecialchars($genre['genre_name']);
-
                 echo '<div class="swiper-slide">';
                 echo    '<div class="card-text">';
                 echo        '<h4>' . $genre_name . '</h4>';
