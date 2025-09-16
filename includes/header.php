@@ -5,10 +5,10 @@ require_once 'class.user.php';
 $user = new USER($conn);
 
 $menuLinks = array(
-    array("title" => "Hem", "url" => "front_page.php"),
-    array("title" => "Böcker", "url" => "books.php"),
+    array("title" => "Hem", "url" => "home.php"),
+    array("title" => "Böcker", "url" => "search_page.php"),
     array("title" => "Exklusivt", "url" => "exclusives.php"),
-    array("title" => "Om oss", "url" => "about-us.php"),
+    array("title" => "Om oss", "url" => "about_us.php"),
     array("title" => "Logga in", "url" => "login.php")
 );
 
@@ -17,12 +17,11 @@ if (isset($_GET['logout'])) {
 }
 ?>
 
-<a href="front_page.php" class="button">Hem</a>
+<!--<a href="front_page.php" class="button">Hem</a>
 <a href="books.php" class="button">Böcker</a>
 <a href="exclusives.php" class="button">Exklusivt</a>
 <a href="about-us.php" class="button">Om oss</a>
-<a href="login.php" class="button">Logga in</a>
-
+<a href="login.php" class="button">Logga in</a>-->
 <?php
 $adminMenuLinks = array(
     array("title" => "Adminpanel", "url" => "admin.php")
@@ -41,7 +40,6 @@ $adminMenuLinks = array(
     <nav id="navigation">
         <a href="../index.php"> <!-- adjust path if needed -->
            <img src="images/Qvintus_Logo.png" style="height: 60px; width: 120px;">
-
         </a>
         <?php if ($user->checkUserLogInStatus()): ?>
             <a href="../home.php" class="button">Hem</a>
@@ -53,7 +51,7 @@ $adminMenuLinks = array(
             </form>
         <?php else: ?>
             <?php foreach ($menuLinks as $link): ?>
-                <a href="../<?= $link['url'] ?>" class="button"><?= $link['title'] ?></a>
+                <a href="<?= $link['url'] ?>" class="button"><?= $link['title'] ?></a>
             <?php endforeach; ?>
         <?php endif; ?>
     </nav>
