@@ -1,6 +1,6 @@
 <?php
 include "includes/header.php";
-require_once "includes/db.php"; // Your PDO connection
+require_once "includes/db.php"; // PDO connection
 ?>
 
 <!DOCTYPE html>
@@ -18,171 +18,118 @@ require_once "includes/db.php"; // Your PDO connection
 <body>
 <div class="main-container">
 
+<!-- ---------------------------- -->
+<!-- Sällsynta och värdefulla böcker -->
+<h3 class="mt-5">Sällsynta och värdefulla böcker</h3>
+<div class="card-grid">
 <?php
-$search = "";
-$results = [];
+$stmt = $conn->prepare("
+    SELECT *
+    FROM table_books
+    WHERE book_rarity = 1 AND status_fk = 1
+    ORDER BY book_release_date DESC
+    LIMIT 20
+");
+$stmt->execute();
+$rare_books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Search functionality
-if (isset($_GET['search'])) {
-    $search = $_GET['search'];
-    $like = "%" . $search . "%";
-
-    $stmt = $conn->prepare("
-        SELECT 
-            tb.book_id,
-            tb.book_title AS title,
-            tb.book_desc AS description,
-            tb.book_language,
-            tb.book_release_date,
-            tb.book_pages,
-            tb.book_price,
-            tb.book_rarity AS book_rarity,
-            tg.genre_name
-        FROM table_books tb
-        LEFT JOIN t_book_genres tbg ON tb.book_id = tbg.book_id_fk
-        LEFT JOIN t_genres tg ON tbg.genre_id_fk = tg.genre_id
-        WHERE (tb.book_title LIKE :like OR tg.genre_name LIKE :like2)
-          AND tb.status_fk = 1
-    ");
-    $stmt->bindParam(":like", $like);
-    $stmt->bindParam(":like2", $like);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} else {
-    // Default: latest 8 visible books
-    $stmt = $conn->prepare("
-        SELECT 
-            book_id,
-            book_title AS title,
-            book_desc AS description,
-            book_language,
-            book_release_date,
-            book_pages,
-            book_price,
-            book_rarity AS book_rarity
-        FROM table_books
-        WHERE status_fk = 1
-        ORDER BY book_release_date DESC
-        LIMIT 8
-    ");
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+foreach ($rare_books as $book):
+    $cover = "images/book_" . $book['book_id'] . ".jpg";
+    if (!file_exists($cover)) $cover = "images/placeholder.jpg";
 ?>
-
-<!-- 📚 Search Form -->
-<div class="search-container">
-    <h2>Sök böcker</h2>
-    <form method="GET" action="front_page.php">
-        <input type="text" name="search" placeholder="Enter book title or genre..." value="<?= htmlspecialchars($search) ?>">
-        <button type="submit">Sök</button>
-    </form>
-</div>
-
-<!-- 📋 Book Results -->
-<div class="results-container">
-    <?php if (!empty($results)): ?>
-        <div class="card-grid">
-            <?php foreach ($results as $book): ?>
-                <div class="card">
-                    <?php if (!empty($book['book_rarity'])): ?>
-                        <div class="rare-badge">RARE</div>
-                    <?php endif; ?>
-                    <img src="<?= !empty($book['cover_image']) ? htmlspecialchars($book['cover_image']) : 'images/placeholder.jpg' ?>" alt="<?= htmlspecialchars($book['title']) ?>">
-                    <div class="card-content">
-                        <h4><?= htmlspecialchars($book['title']) ?></h4>
-                        <?php if (!empty($book['genre_name'])): ?>
-                            <p class="genre"><?= htmlspecialchars($book['genre_name']) ?></p>
-                        <?php endif; ?>
-                        <p class="desc"><?= htmlspecialchars(mb_strimwidth($book['description'], 0, 120, '...')) ?></p>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+    <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
+        <div class="rare-badge">RARE</div>
+        <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['book_title']) ?>">
+        <div class="card-content">
+            <h4><?= htmlspecialchars($book['book_title']) ?></h4>
+            <p class="desc"><?= htmlspecialchars(mb_strimwidth($book['book_desc'],0,120,'...')) ?></p>
         </div>
-    <?php else: ?>
-        <p>Inga böcker hittades.</p>
-    <?php endif; ?>
-</div>
-
-<!-- 🔥 Swiper for Rare Books -->
-<h3 class="mt-5">Sällsynta böcker</h3>
-<div class="swiper">
-    <div class="swiper-wrapper">
-        <?php
-        $stmt = $conn->prepare("
-            SELECT 
-                book_id,
-                book_title AS title,
-                book_desc AS description,
-                book_rarity AS book_rarity
-            FROM table_books
-            WHERE book_rarity = 1 AND status_fk = 1
-            LIMIT 20
-        ");
-        $stmt->execute();
-        $rare_books = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!empty($rare_books)) {
-            foreach ($rare_books as $book) {
-                // Construct image path from the images folder
-                // Example: images/book_{id}.jpg
-                $cover = "images/book_" . $book['book_id'] . ".jpg";
-                
-                // If the image file does not exist, use a placeholder
-                if (!file_exists($cover)) {
-                    $cover = "images/placeholder.jpg";
-                }
-
-                $title = htmlspecialchars($book['title']);
-                $desc = htmlspecialchars(mb_strimwidth($book['description'], 0, 100, '...'));
-
-                echo '<div class="swiper-slide">';
-                echo    '<img src="' . $cover . '" class="card-image" alt="' . $title . '">';
-                echo    '<div class="card-text">';
-                echo        '<h4>' . $title . '</h4>';
-                echo        '<p>' . $desc . '</p>';
-                echo    '</div>';
-                echo '</div>';
-            }
-        } else {
-            echo '<p>Inga sällsynta böcker hittades.</p>';
-        }
-        ?>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="bookModal<?= $book['book_id'] ?>" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?= htmlspecialchars($book['book_title']) ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="<?= $cover ?>" class="img-fluid mb-3">
+                    <p><strong>Author:</strong> <?= htmlspecialchars($book['book_author']) ?></p>
+                    <p><strong>Illustrator:</strong> <?= htmlspecialchars($book['illustrator']) ?></p>
+                    <p><strong>Language:</strong> <?= htmlspecialchars($book['book_language']) ?></p>
+                    <p><strong>Release Date:</strong> <?= htmlspecialchars($book['book_release_date']) ?></p>
+                    <p><strong>Pages:</strong> <?= htmlspecialchars($book['book_pages']) ?></p>
+                    <p><strong>Price:</strong> <?= htmlspecialchars($book['book_price']) ?> SEK</p>
+                    <p><strong>Rarity:</strong> <?= $book['book_rarity'] ? 'Rare' : 'Normal' ?></p>
+                    <p><strong>Description:</strong><br><?= nl2br(htmlspecialchars($book['book_desc'])) ?></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
+</div>
+
+<!-- ---------------------------- -->
+<!-- Populära genrer -->
+<h3 class="mt-5">Populära genrer</h3>
+<div class="swiper">
+    <div class="swiper-wrapper">
+<?php
+$stmt = $conn->prepare("SELECT * FROM table_genres WHERE is_populare > 0 ORDER BY is_populare DESC LIMIT 20");
+$stmt->execute();
+$popular_genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($popular_genres as $genre):
+    $cover = "images/genre_" . $genre['genre_id'] . ".jpg";
+    if (!file_exists($cover)) $cover = "images/placeholder.jpg";
+?>
+        <div class="swiper-slide card" style="height:180px; width:140px; text-align:center; padding:5px;">
+            <img src="<?= $cover ?>" alt="<?= htmlspecialchars($genre['genre_name']) ?>" style="height:100px; width:auto; object-fit:cover;">
+            <div class="card-content" style="font-size:0.9em; margin-top:5px;">
+                <h5 style="margin:0;"><?= htmlspecialchars($genre['genre_name']) ?></h5>
+                <p style="margin:0;">Popularity: <?= $genre['is_populare'] ?></p>
+            </div>
+        </div>
+<?php endforeach; ?>
+    </div>
+
+    <!-- Swiper navigation -->
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
 </div>
 
-<!-- 🔥 Swiper for Popular Genres -->
-<h3 class="mt-5">Populära genrer</h3>
-<div class="swiper">
-    <div class="swiper-wrapper">
-    <?php
-    $stmt = $conn->prepare("
-        SELECT genre_name 
-        FROM table_genres
-        LIMIT 20
-    ");
 
-        $stmt->execute();
-        $popular_genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+<!-- ---------------------------- -->
+<!-- Populärt just nu -->
+<h3 class="mt-5">Populärt just nu</h3>
+<div class="card-grid">
+<?php
+$stmt = $conn->prepare("
+    SELECT *
+    FROM table_books
+    WHERE status_fk = 1
+    ORDER BY book_popularity DESC
+    LIMIT 10
+");
+$stmt->execute();
+$popular_books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!empty($popular_genres)) {
-            foreach ($popular_genres as $genre) {
-                $genre_name = htmlspecialchars($genre['genre_name']);
-                echo '<div class="swiper-slide">';
-                echo    '<div class="card-text">';
-                echo        '<h4>' . $genre_name . '</h4>';
-                echo    '</div>';
-                echo '</div>';
-            }
-        } else {
-            echo '<p>Inga populära genrer hittades.</p>';
-        }
-        ?>
+foreach ($popular_books as $book):
+    $cover = "images/book_" . $book['book_id'] . ".jpg";
+    if (!file_exists($cover)) $cover = "images/placeholder.jpg";
+?>
+    <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
+        <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['book_title']) ?>">
+        <div class="card-content">
+            <h4><?= htmlspecialchars($book['book_title']) ?></h4>
+        </div>
     </div>
+<?php endforeach; ?>
 </div>
 
 <!-- 🧩 Custom Request Section -->
@@ -201,7 +148,7 @@ if (isset($_GET['search'])) {
         </p>
     </div>
     <div class="split-image">
-        <img src="images/icon.php">
+        <img src="images/gubbe.webp">
     </div>
 </div>
 
