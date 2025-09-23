@@ -18,6 +18,15 @@ require_once "includes/db.php"; // PDO connection
 <body>
 <div class="main-container">
 
+<!-- 📚 Search Form -->
+<div class="search-container">
+    <h2>Sök böcker</h2>
+    <form method="GET" action="book_page.php">
+        <input type="text" name="search" placeholder="Enter book title or genre...">
+        <button type="submit">Sök</button>  
+    </form>
+</div>
+
 <!-- ---------------------------- -->
 <!-- Sällsynta och värdefulla böcker -->
 <h3 class="mt-5">Sällsynta och värdefulla böcker</h3>
@@ -148,7 +157,7 @@ foreach ($popular_books as $book):
         </p>
     </div>
     <div class="split-image">
-        <img src="images/gubbe.webp">
+        <img src="images/gubbe">
     </div>
 </div>
 
