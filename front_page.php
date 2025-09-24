@@ -46,7 +46,7 @@ foreach ($rare_books as $book):
 ?>
     <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
         <div class="rare-badge">RARE</div>
-        <img src="<?= $cover ?>" alt="">
+        <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['book_title']) ?>">
         <div class="card-content">
             <h4><?= htmlspecialchars($book['book_title']) ?></h4>
             <p class="desc"><?= htmlspecialchars(mb_strimwidth($book['book_desc'],0,120,'...')) ?></p>
@@ -62,7 +62,7 @@ foreach ($rare_books as $book):
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <img src="<?= $cover ?>" class="img-fluid mb-3" alt="">
+                    <img src="<?= $cover ?>" class="img-fluid mb-3">
                     <p><strong>Author:</strong> <?= htmlspecialchars($book['book_author']) ?></p>
                     <p><strong>Illustrator:</strong> <?= htmlspecialchars($book['illustrator']) ?></p>
                     <p><strong>Language:</strong> <?= htmlspecialchars($book['book_language']) ?></p>
@@ -94,7 +94,7 @@ foreach ($popular_genres as $genre):
     if (!file_exists($cover)) $cover = "images/placeholder.jpg";
 ?>
         <div class="swiper-slide card" style="height:180px; width:140px; text-align:center; padding:5px;">
-            <img src="<?= $cover ?>" alt="" style="height:100px; width:auto; object-fit:cover;">
+            <img src="<?= $cover ?>" alt="<?= htmlspecialchars($genre['genre_name']) ?>" style="height:100px; width:auto; object-fit:cover;">
             <div class="card-content" style="font-size:0.9em; margin-top:5px;">
                 <h5 style="margin:0;"><?= htmlspecialchars($genre['genre_name']) ?></h5>
                 <p style="margin:0;">Popularity: <?= $genre['is_populare'] ?></p>
@@ -126,7 +126,7 @@ foreach ($popular_books as $book):
     if (!file_exists($cover)) $cover = "images/placeholder.jpg";
 ?>
     <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
-        <img src="<?= $cover ?>" alt="">
+        <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['book_title']) ?>">
         <div class="card-content">
             <h4><?= htmlspecialchars($book['book_title']) ?></h4>
         </div>
@@ -134,6 +134,7 @@ foreach ($popular_books as $book):
 <?php endforeach; ?>
 </div>
 
+<!-- 🧩 Custom Request Section -->
 <div class="request-section">
     <h2>Hittar inte det du söker?</h2>
     <p>Inga problem, vi klarar det flesta önskemål, stora som små.</p>
@@ -149,7 +150,7 @@ foreach ($popular_books as $book):
         </p>
     </div>
     <div class="split-image">
-        <img src="images/gubbe.webp" alt="">
+        <img src="images/gubbe">
     </div>
 </div>
 
