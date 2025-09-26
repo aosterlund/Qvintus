@@ -51,7 +51,7 @@ $adminMenuLinks = array(
             </form>
         <?php else: ?>
             <?php foreach ($menuLinks as $link): ?>
-                <a href="<?= $link['url'] ?>" class="button"><?= $link['title'] ?></a>
+                <a href="<?= $link['url'] ?>" class="nav-button"><?= $link['title'] ?></a>
             <?php endforeach; ?>
         <?php endif; ?>
     </nav>
