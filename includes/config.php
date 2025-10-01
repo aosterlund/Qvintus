@@ -4,7 +4,7 @@ $username = "root";
 $password = "";
 
 try {
-  $conn = new PDO("mysql:host=$servername;dbname=2024_qvintus;charset=utf8mb4", $username, $password);
+  $conn = new PDO("mysql:host=$servername;dbname=2024_login_system_sen;charset=utf8mb4", $username, $password);
   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   //echo "Connected successfully<br>";
 } catch(PDOException $e) {

@@ -1,5 +1,5 @@
 <?php
-   include "includes/header.php";
+  // include "includes/header.php";
   require_once "includes/db.php"; // Your PDO connection
 
 ?>
@@ -32,8 +32,13 @@
  <textarea> knkregkresgjlsegkslegrejsl</textarea>
  
 <div id="surrounding-div">
- <?php echo"<div>
 <H2 style='text-align:center;'>Sällsynt och värdefullt</h2>
+ <?php 
+ $datafromdbksl = $db; 
+ 
+
+ foreach ()echo"<div>
+
 <div class='container-fluid text-center'>
     <div class='row'>
         <div class='col'>
@@ -47,7 +52,7 @@
   </div>
 </div>
     </div>
-        </div>
+        </div>"?>
 
         <div class='col'>
 <div class='card' style='width: 18rem;'>
