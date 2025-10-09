@@ -92,6 +92,7 @@
                 </div>
             </div>
         <?php endforeach; ?>
+        <div class="hubert float-end" ><a href="search_page.php" style="text-decoration:none;"><btn type="button" class="humberto">Se mera</btn></a></div>
     </div>
 
         <!--line across sideways-->
@@ -125,10 +126,13 @@
                 </div>
             <?php endforeach; ?>
         </div>
+        <div class="hubert float-end" ><a href="search_page.php" style="text-decoration:none;"><btn type="button" class="humberto">Se mera</btn></a></div>
         <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-    </div>
+        <div class="swiper-button-prev"></div><br>
 
+        
+    </div>
+                
                 <!--line across sideways-->
     <div class="on-line" style="width:auto; height:1px; background-color:black;"></div>
 
