@@ -1,0 +1,49 @@
+[33m1fc2e41[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mFront-page[m[33m, [m[1;31mQvintus/main[m[33m, [m[1;31mQvintus/Tema-Meny[m[33m, [m[1;31mQvintus/Search-Branch[m[33m, [m[1;31mQvintus/HEAD[m[33m, [m[1;31mQvintus/Front-Page[m[33m, [m[1;31mQvintus/Edit-Page[m[33m)[m HEAD@{0}: checkout: moving from main to Front-page
+[33m49a4110[m[33m ([m[1;32mmain[m[33m)[m HEAD@{1}: Branch: renamed refs/heads/User-panel to refs/heads/main
+[33m49a4110[m[33m ([m[1;32mmain[m[33m)[m HEAD@{3}: commit: Initial commit
+[33m24d9052[m HEAD@{4}: checkout: moving from main to User-panel
+[33m24d9052[m HEAD@{5}: Branch: renamed refs/heads/User-panel to refs/heads/main
+[33m24d9052[m HEAD@{7}: commit: Initial commit
+[33m9a77ff8[m HEAD@{8}: checkout: moving from main to User-panel
+[33m9a77ff8[m HEAD@{9}: commit: Admin sida klar
+[33mc9b5ecf[m HEAD@{10}: Branch: renamed refs/heads/main to refs/heads/main
+[33mc9b5ecf[m HEAD@{12}: Branch: renamed refs/heads/Book-panel to refs/heads/main
+[33mc9b5ecf[m HEAD@{14}: commit: Initial commit
+[33m8f18789[m[33m ([m[1;32mSearch-Page[m[33m, [m[1;32mAdmin-panel[m[33m)[m HEAD@{15}: checkout: moving from Admin-panel to Book-panel
+[33m8f18789[m[33m ([m[1;32mSearch-Page[m[33m, [m[1;32mAdmin-panel[m[33m)[m HEAD@{16}: checkout: moving from Search-Page to Admin-panel
+[33m8f18789[m[33m ([m[1;32mSearch-Page[m[33m, [m[1;32mAdmin-panel[m[33m)[m HEAD@{17}: checkout: moving from main to Search-Page
+[33ma4099d4[m HEAD@{18}: Branch: renamed refs/heads/Front-Page to refs/heads/main
+[33ma4099d4[m HEAD@{20}: commit: Initial commit
+[33maeac24d[m HEAD@{21}: checkout: moving from Search-Page to Front-Page
+[33m8f18789[m[33m ([m[1;32mSearch-Page[m[33m, [m[1;32mAdmin-panel[m[33m)[m HEAD@{22}: checkout: moving from Search-page to Search-Page
+[33m8f18789[m[33m ([m[1;32mSearch-Page[m[33m, [m[1;32mAdmin-panel[m[33m)[m HEAD@{23}: checkout: moving from Front-page to Search-page
+[33maeac24d[m HEAD@{24}: checkout: moving from front-page to Front-page
+[33maeac24d[m HEAD@{25}: commit: modal funkar
+[33m1fc2e41[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mFront-page[m[33m, [m[1;31mQvintus/main[m[33m, [m[1;31mQvintus/Tema-Meny[m[33m, [m[1;31mQvintus/Search-Branch[m[33m, [m[1;31mQvintus/HEAD[m[33m, [m[1;31mQvintus/Front-Page[m[33m, [m[1;31mQvintus/Edit-Page[m[33m)[m HEAD@{26}: checkout: moving from main to front-page
+[33mc53958e[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{27}: Branch: renamed refs/heads/front-page to refs/heads/main
+[33mc53958e[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{29}: commit: funkar
+[33m422a9f8[m HEAD@{30}: checkout: moving from Search-Page to front-page
+[33m8f18789[m[33m ([m[1;32mSearch-Page[m[33m, [m[1;32mAdmin-panel[m[33m)[m HEAD@{31}: commit: books visar
+[33m37bb6a3[m[33m ([m[1;31mQvintus/Search-Page[m[33m)[m HEAD@{32}: checkout: moving from Front-Page to Search-Page
+[33m422a9f8[m HEAD@{33}: commit: Updaterad
+[33m42289d6[m HEAD@{34}: checkout: moving from Searchpage to Front-Page
+[33mc35a2d6[m[33m ([m[1;32mSearchpage[m[33m)[m HEAD@{35}: commit: Kan söka efter böcker
+[33m42289d6[m HEAD@{36}: checkout: moving from Front-Page to Searchpage
+[33m42289d6[m HEAD@{37}: commit: updaterad
+[33ma5d50c9[m HEAD@{38}: commit: updaterad
+[33m274db50[m HEAD@{39}: checkout: moving from Search-Page to Front-Page
+[33m37bb6a3[m[33m ([m[1;31mQvintus/Search-Page[m[33m)[m HEAD@{40}: checkout: moving from Book-Page to Search-Page
+[33mb4397fd[m[33m ([m[1;32mBook-Page[m[33m)[m HEAD@{41}: checkout: moving from Front-Page to Book-Page
+[33m274db50[m HEAD@{42}: commit: Funkar
+[33m15edb73[m HEAD@{43}: commit: Utseende klart
+[33md97419b[m HEAD@{44}: commit: edited
+[33m1fc2e41[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mFront-page[m[33m, [m[1;31mQvintus/main[m[33m, [m[1;31mQvintus/Tema-Meny[m[33m, [m[1;31mQvintus/Search-Branch[m[33m, [m[1;31mQvintus/HEAD[m[33m, [m[1;31mQvintus/Front-Page[m[33m, [m[1;31mQvintus/Edit-Page[m[33m)[m HEAD@{45}: checkout: moving from Main to Front-Page
+[33m1fc2e41[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mFront-page[m[33m, [m[1;31mQvintus/main[m[33m, [m[1;31mQvintus/Tema-Meny[m[33m, [m[1;31mQvintus/Search-Branch[m[33m, [m[1;31mQvintus/HEAD[m[33m, [m[1;31mQvintus/Front-Page[m[33m, [m[1;31mQvintus/Edit-Page[m[33m)[m HEAD@{46}: checkout: moving from Book-Page to Main
+[33mb4397fd[m[33m ([m[1;32mBook-Page[m[33m)[m HEAD@{47}: commit: bookstart
+[33mec34d4e[m[33m ([m[1;32mEdit-Page[m[33m)[m HEAD@{48}: checkout: moving from Edit-Page to Book-Page
+[33mec34d4e[m[33m ([m[1;32mEdit-Page[m[33m)[m HEAD@{49}: commit: editbookstart
+[33m37bb6a3[m[33m ([m[1;31mQvintus/Search-Page[m[33m)[m HEAD@{50}: checkout: moving from Search-Page to Edit-Page
+[33m37bb6a3[m[33m ([m[1;31mQvintus/Search-Page[m[33m)[m HEAD@{51}: pull --rebase Qvintus Search-Page (finish): returning to refs/heads/Search-Page
+[33m37bb6a3[m[33m ([m[1;31mQvintus/Search-Page[m[33m)[m HEAD@{52}: pull --rebase Qvintus Search-Page (pick): searchpagestart
+[33m1fc2e41[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mFront-page[m[33m, [m[1;31mQvintus/main[m[33m, [m[1;31mQvintus/Tema-Meny[m[33m, [m[1;31mQvintus/Search-Branch[m[33m, [m[1;31mQvintus/HEAD[m[33m, [m[1;31mQvintus/Front-Page[m[33m, [m[1;31mQvintus/Edit-Page[m[33m)[m HEAD@{53}: pull --rebase Qvintus Search-Page (start): checkout 1fc2e41569d9893fb678acf60d0f7db77ec0d036
+[33m3f31afd[m HEAD@{54}: commit (initial): searchpagestart

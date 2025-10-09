@@ -1,6 +1,6 @@
 <?php
-    include "includes/header.php";
-    require_once "includes/db.php"; // Your PDO connection
+include "includes/header.php";
+require_once "includes/db.php";
 ?>
 
 <!DOCTYPE html>
@@ -19,47 +19,51 @@
 <div class="main-container">
 
 <?php
-    $search = "";
-    $results = [];
+$search = "";
+$results = [];
 
-    if (isset($_GET['search'])) {
-        $search = $_GET['search'];
-        $like = "%" . $search . "%";
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $like = "%" . $search . "%";
 
-        $stmt = $conn->prepare("
-            SELECT 
-                t_books.book_id,
-                t_books.title,
-                t_books.description,
-                t_books.cover_image,
-                t_books.is_rare,
-                t_genres.genre_name
-            FROM t_books
-            LEFT JOIN t_book_genres ON t_books.book_id = t_book_genres.book_id_fk
-            LEFT JOIN t_genres ON t_book_genres.genre_id_fk = t_genres.genre_id
-            WHERE (t_books.title LIKE :like OR t_genres.genre_name LIKE :like2)
-              AND t_books.visibility = 1
-        ");
-        $stmt->bindParam(":like", $like);
-        $stmt->bindParam(":like2", $like);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        // Default: show latest 8 visible books
-        $stmt = $conn->prepare("
-            SELECT 
-                book_id, title, description, cover_image, is_rare 
-            FROM t_books 
-            WHERE visibility = 1 
-            ORDER BY date_published DESC 
-            LIMIT 8
-        ");
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    $stmt = $conn->prepare("
+        SELECT 
+            table_books.book_id,
+            table_books.book_title AS title,
+            table_books.book_description AS description,
+            table_books.book_cover AS cover_image,
+            table_books.book_rarity AS is_rare,
+            t_genres.genre_name
+        FROM table_books
+        LEFT JOIN t_book_genres ON table_books.book_id = t_book_genres.book_id_fk
+        LEFT JOIN t_genres ON t_book_genres.genre_id_fk = t_genres.genre_id
+        WHERE (table_books.book_title LIKE :like OR t_genres.genre_name LIKE :like2)
+          AND table_books.book_visibility = 1
+    ");
+    $stmt->bindParam(":like", $like);
+    $stmt->bindParam(":like2", $like);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    // Default: show latest 8 visible books
+    $stmt = $conn->prepare("
+        SELECT 
+            book_id,
+            book_title AS title,
+            book_description AS description,
+            book_cover AS cover_image,
+            book_rarity AS is_rare
+        FROM table_books
+        WHERE book_visibility = 1
+        ORDER BY book_release_date DESC
+        LIMIT 8
+    ");
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
-<!-- 📚 Search Form -->
+<!-- Search Form -->
 <div class="search-container">
     <h2>Sök böcker</h2>
     <form method="GET" action="front_page.php">
@@ -68,7 +72,7 @@
     </form>
 </div>
 
-<!-- 📋 Book Results -->
+<!-- Book Results -->
 <div class="results-container">
     <?php if (!empty($results)): ?>
         <div class="card-grid">
@@ -93,15 +97,15 @@
     <?php endif; ?>
 </div>
 
-<!-- 🔥 Swiper for Rare Books -->
+<!-- Swiper for Rare Books -->
 <h3 class="mt-5">Sällsynta böcker</h3>
 <div class="swiper">
     <div class="swiper-wrapper">
         <?php
         $stmt = $conn->prepare("
-            SELECT title, description, cover_image 
-            FROM t_books 
-            WHERE is_rare = 1 AND visibility = 1
+            SELECT book_title AS title, book_description AS description, book_cover AS cover_image
+            FROM table_books
+            WHERE book_rarity = 1 AND book_visibility = 1
             LIMIT 20
         ");
         $stmt->execute();
@@ -126,30 +130,22 @@
         }
         ?>
     </div>
-
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
 </div>
 
-<!-- 🔥 Swiper for Popular Genres -->
+<!-- Swiper for Popular Genres -->
 <h3 class="mt-5">Populära genrer</h3>
 <div class="swiper">
     <div class="swiper-wrapper">
         <?php
-        // Fetch popular genres
-        $stmt = $conn->prepare("
-            SELECT genre_name 
-            FROM t_genres 
-            WHERE display = 1
-            LIMIT 20
-        ");
+        $stmt = $conn->prepare("SELECT genre_name FROM t_genres WHERE display = 1 LIMIT 20");
         $stmt->execute();
         $popular_genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($popular_genres)) {
             foreach ($popular_genres as $genre) {
                 $genre_name = htmlspecialchars($genre['genre_name']);
-
                 echo '<div class="swiper-slide">';
                 echo    '<div class="card-text">';
                 echo        '<h4>' . $genre_name . '</h4>';
@@ -163,14 +159,14 @@
     </div>
 </div>
 
-<!-- 🧩 Custom Request Section -->
+<!-- Custom Request Section -->
 <div class="request-section">
     <h2>Hittar inte det du söker?</h2>
     <p>Inga problem, vi klarar det flesta önskemål, stora som små.</p>
     <a href="recommends.php" class="request-button">Gör ett önskemål</a>
 </div>
 
-<!-- 🖼️ 50/50 Split Section -->
+<!-- 50/50 Split Section -->
 <div class="split-section">
     <div class="split-text">
         <h2>Hälsningar från Qvintus!</h2>
