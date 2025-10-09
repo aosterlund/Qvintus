@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             case 1: // Administrator
                                 header("Location: book_panel.php");
                                 exit();
-                            case 2: // Moderator / Regular user
+                            case 2: // Moderator                             git add user_panel.php
+                            git commit -m "Restore old user_panel.php"
                                 header("Location: user_panel.php");
                                 exit();
                             default:
