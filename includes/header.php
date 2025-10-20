@@ -11,9 +11,9 @@ if (isset($_POST['logout'])) {
 // Menu links for guests
 $menuLinks = [
     ["title" => "Hem", "url" => "front_page.php"],
-    ["title" => "Böcker", "url" => "books.php"],
+    ["title" => "Böcker", "url" => "search_page.php"],
     ["title" => "Exklusivt", "url" => "exclusives.php"],
-    ["title" => "Om oss", "url" => "about-us.php"],
+    ["title" => "Om oss", "url" => "about_us.php"],
     ["title" => "Logga in", "url" => "login.php"],
 ];
 ?>
@@ -22,12 +22,12 @@ $menuLinks = [
 <head>
     <meta charset="UTF-8">
     <title>Qvintus - Inloggningssystem</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header>
     <nav id="navigation">
-        <a href="../index.php">
+        <a href="index.php">
             <img src="images/Qvintus_Logo.png" style="height: 60px; width: 120px;">
         </a>
 
@@ -35,7 +35,7 @@ $menuLinks = [
             <a href="../home.php" class="button">Hem</a>
 
             <?php if ($user->checkUserRole(50)): ?>
-                <a href="../admin.php" class="button">Adminpanel</a>
+                <a href="admin.php" class="button">Adminpanel</a>
             <?php endif; ?>
 
             <form method="post" action="" style="display: inline;">
