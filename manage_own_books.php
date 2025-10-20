@@ -1,10 +1,9 @@
 <?php
 include "includes/header.php";
-require_once "includes/db.php"; // PDO connection
+require_once "includes/db.php";
 
-// For example, assume the logged-in user ID is stored in session
 session_start();
-$user_id = $_SESSION['user_id'] ?? 1; // default to 1 if not set
+$user_id = $_SESSION['user_id'] ?? 1;
 
 try {
     $stmt = $conn->prepare("SELECT * FROM table_books WHERE created_by_fk = ? ORDER BY book_id ASC");
@@ -21,7 +20,6 @@ try {
         <?php if ($successMessage): ?>
         <div id="successAlert"><?= $successMessage ?></div>
         <script>
-            // Fade out after 5 seconds
             setTimeout(() => {
                 const alert = document.getElementById('successAlert');
                 if(alert){
