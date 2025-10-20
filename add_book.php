@@ -2,23 +2,23 @@
 require_once "includes/db.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get form inputs
     $title = $_POST['title'];
-    $description = $_POST['description'];
-    $date_published = $_POST['date_published'];
-    $page_amount = $_POST['page_amount'];
-    $publisher_id_fk = $_POST['publisher_id_fk'];
-    $age_range_id_fk = $_POST['age_range_id_fk'];
-    $series_id_fk = $_POST['series_id_fk'] ?: null;
+    $author = $_POST['author'] ?? 'Okänd';
+    $language = $_POST['language'] ?? 'Svenska';
+    $release_date = $_POST['release_date'];
+    $pages = $_POST['pages'];
     $price = $_POST['price'];
-    $visibility = 1;
-    $display = 1;
-    $user_id_fk = $_POST['user_id_fk'];
+    $user_id_fk = $_POST['user_id_fk'] ?? 1;
     $is_rare = isset($_POST['is_rare']) ? 1 : 0;
 
     // Upload cover image
     $cover_image = null;
     if (!empty($_FILES['cover_image']['name'])) {
         $upload_dir = "uploads/";
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
         $filename = uniqid() . "_" . basename($_FILES["cover_image"]["name"]);
         $target_file = $upload_dir . $filename;
 
@@ -27,60 +27,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Insert query
+    // Insert into table_books
     $stmt = $conn->prepare("
-        INSERT INTO t_book 
-        (title, description, date_published, page_amount, publisher_id_fk, age_range_id_fk, series_id_fk, price, cover_image, visibility, display, user_id_fk, is_rare)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO table_books 
+        (book_title, book_author, book_language, book_release_date, book_pages, book_price, book_rarity, book_cover, created_by_fk)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
 
     $stmt->execute([
-        $title, $description, $date_published, $page_amount,
-        $publisher_id_fk, $age_range_id_fk, $series_id_fk,
-        $price, $cover_image, $visibility, $display, $user_id_fk, $is_rare
+        $title,
+        $author,
+        $language,
+        $release_date,
+        $pages,
+        $price,
+        $is_rare,
+        $cover_image,
+        $user_id_fk
     ]);
 
-    echo "<p>Boken har lagts till i databasen!</p>";
+    echo "<p class='success-message'>Boken har lagts till i databasen!</p>";
 }
 ?>
 
-<h2>Lägg till en ny bok</h2>
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Lägg till ny bok</title>
+    <link rel="stylesheet" href="css/add_book.css">
+</head>
+<body>
+<div class="add-book-container">
+    <h2>Lägg till en ny bok</h2>
 
-<form method="POST" enctype="multipart/form-data">
-    <label>Titel:</label><br>
-    <input type="text" name="title" required><br><br>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Titel:</label>
+        <input type="text" name="title" required>
 
-    <label>Beskrivning:</label><br>
-    <textarea name="description" required></textarea><br><br>
+        <label>Författare:</label>
+        <input type="text" name="author">
 
-    <label>Publiceringsdatum:</label><br>
-    <input type="date" name="date_published" required><br><br>
+        <label>Språk:</label>
+        <input type="text" name="language">
 
-    <label>Antal sidor:</label><br>
-    <input type="number" name="page_amount" required><br><br>
+        <label>Publiceringsdatum:</label>
+        <input type="date" name="release_date" required>
 
-    <label>Pris (kr):</label><br>
-    <input type="number" step="0.01" name="price" required><br><br>
+        <label>Antal sidor:</label>
+        <input type="number" name="pages" required>
 
-    <label>Förlags-ID:</label><br>
-    <input type="number" name="publisher_id_fk" required><br><br>
+        <label>Pris (kr):</label>
+        <input type="number" step="0.01" name="price" required>
 
-    <label>Åldersintervall-ID:</label><br>
-    <input type="number" name="age_range_id_fk" required><br><br>
+        <label>Omslagsbild:</label>
+        <input type="file" name="cover_image">
 
-    <label>Serie-ID (om finns):</label><br>
-    <input type="number" name="series_id_fk"><br><br>
+        <label>Användar-ID:</label>
+        <input type="number" name="user_id_fk" value="1">
 
-    <label>Omslagsbild:</label><br>
-    <input type="file" name="cover_image"><br><br>
+        <label>
+            <input type="checkbox" name="is_rare">
+            Sällsynt bok
+        </label>
 
-    <label>Användar-ID:</label><br>
-    <input type="number" name="user_id_fk" value="1"><br><br>
-
-    <label>
-        <input type="checkbox" name="is_rare">
-        Sällsynt bok
-    </label><br><br>
-
-    <button type="submit">Lägg till bok</button>
-</form>
+        <button type="submit">Lägg till bok</button>
+    </form>
+</div>
+</body>
+</html>
