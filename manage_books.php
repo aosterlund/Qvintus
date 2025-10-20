@@ -38,7 +38,7 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($book['book_language']) ?></td>
                         <td><?= htmlspecialchars($book['book_release_date']) ?></td>
                         <td><?= htmlspecialchars($book['book_pages']) ?></td>
-                        <td><?= htmlspecialchars($book['book_price']) ?> kr</td>
+                        <td><?= htmlspecialchars($book['book_price']) ?> €</td>
                         <td><?= $book['book_rarity'] ? 'Ja' : 'Nej' ?></td>
                         <td>
                             <?php if($book['book_cover']): ?>
