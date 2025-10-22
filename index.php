@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="css/style.css">
+<link  href="css/style.css" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <script src="js/script.js" defer></script>
@@ -55,7 +55,7 @@
 
         foreach ($rare_books as $book):
             $cover = "images/book_" . $book['book_id'] . ".jpg";
-            if (!file_exists($cover)) $cover = "images/placeholder.jpg";
+            if (!file_exists(__DIR__ . '/' . $cover)) $cover = "images/placeholder.jpg";
         ?>
             <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
                 <div class="rare-badge">RARE</div>
@@ -115,7 +115,7 @@
 
             foreach ($popular_genres as $genre):
                 $cover = "images/genre_" . $genre['genre_id'] . ".jpg";
-                if (!file_exists($cover)) $cover = "images/placeholder.jpg";
+                if (!file_exists(__DIR__ . '/' . $cover)) $cover = "images/placeholder.jpg";
             ?>
                 <div class="swiper-slide card" style="height:180px; width:140px; text-align:center; padding:5px;">
                     <img src="<?= $cover ?>" alt="<?= htmlspecialchars($genre['genre_name']) ?>" style="height:100px; width:auto; object-fit:cover;">
@@ -152,7 +152,7 @@
 
         foreach ($popular_books as $book):
             $cover = "images/book_" . $book['book_id'] . ".jpg";
-            if (!file_exists($cover)) $cover = "images/placeholder.jpg";
+            if (!file_exists(__DIR__ . '/' . $cover)) $cover = "images/placeholder.jpg";
         ?>
             <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
                 <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['book_title']) ?>">
