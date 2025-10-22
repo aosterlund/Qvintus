@@ -57,7 +57,7 @@
             $cover = "images/book_" . $book['book_id'] . ".jpg";
             if (!file_exists(__DIR__ . '/' . $cover)) $cover = "images/placeholder.jpg";
         ?>
-            <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
+            <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
                 <div class="rare-badge">RARE</div>
                 <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['book_title']) ?>">
                 <div class="card-content">
@@ -65,7 +65,6 @@
                     <p class="desc"><?= htmlspecialchars(mb_strimwidth($book['book_desc'],0,120,'...')) ?></p>
                 </div>
             </div>
-
             <!-- Modal -->
             <div class="modal fade" id="bookModal<?= $book['book_id'] ?>" tabindex="-1">
                 <div class="modal-dialog modal-lg">

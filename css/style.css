@@ -368,3 +368,43 @@ a:hover .humberto {
     color:black;
     font-weight:bold;
 }
+
+#jörgen {
+    height:100px;
+}
+
+.book-card { box-sizing: border-box; }
+
+/* grid container (if not already set) */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* default: 4 per row */
+.book-card {
+  flex: 1 1 calc(25% - 16px);
+  max-width: calc(25% - 16px);
+}
+
+/* desktop */
+@media (min-width: 1200px) {
+  .book-card { flex: 1 1 calc(20% - 16px); max-width: calc(20% - 16px); }
+}
+
+/* tablet */
+@media (max-width: 991.98px) {
+  .book-card { flex: 1 1 calc(33.333% - 16px); max-width: calc(33.333% - 16px); }
+}
+
+/* small tablet / large phone */
+@media (max-width: 767.98px) {
+  .book-card { flex: 1 1 calc(50% - 16px); max-width: calc(50% - 16px); }
+}
+
+/* phone */
+@media (max-width: 575.98px) {
+  .book-card { flex: 1 1 100%; max-width: 100%; }
+}
