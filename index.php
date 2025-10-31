@@ -27,13 +27,13 @@
  <div class="main-container">
 
     <!-- 📚 Search Form -->
-    <!--<div class="search-container">
+    <div class="search-container">
         <h2>Sök böcker</h2>
         <form method="GET" action="book_page.php">
             <input type="text" name="search" placeholder="Enter book title or genre...">
             <button type="submit">Sök</button>  
         </form>
-    </div>-->
+    </div>
 
     <!--line across sideways-->
     <div class="on-line" style="width:auto; height:1px; background-color:black;"></div>
@@ -116,11 +116,10 @@
                 $cover = "images/genre_" . $genre['genre_id'] . ".jpg";
                 if (!file_exists(__DIR__ . '/' . $cover)) $cover = "images/placeholder.jpg";
             ?>
-                <div class="swiper-slide card" style="height:180px; width:140px; text-align:center; padding:5px;">
-                    <img src="<?= $cover ?>" alt="<?= htmlspecialchars($genre['genre_name']) ?>" style="height:100px; width:auto; object-fit:cover;">
+                <div class="swiper-slide card book-card" style="height:180px; width:140px; text-align:center; padding:5px;">
+                    <img  src="<?= $cover ?>" alt="<?= htmlspecialchars($genre['genre_name'])?>" style="height:100px; width:auto; object-fit:contain;">
                     <div class="card-content" style="font-size:0.9em; margin-top:5px;">
                         <h5 style="margin:0;"><?= htmlspecialchars($genre['genre_name']) ?></h5>
-                        <!--<p style="margin:0;">Popularity: <?= $genre['is_popular'] ?></p>-->
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -153,7 +152,7 @@
             $cover = "images/book_" . $book['book_id'] . ".jpg";
             if (!file_exists(__DIR__ . '/' . $cover)) $cover = "images/placeholder.jpg";
         ?>
-            <div class="card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
+            <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal<?= $book['book_id'] ?>">
                 <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['book_title']) ?>">
                 <div class="card-content">
                     <h4><?= htmlspecialchars($book['book_title']) ?></h4>

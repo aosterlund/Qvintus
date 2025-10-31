@@ -31,12 +31,12 @@ if (isset($_GET['search'])) {
 
     $stmt = $conn->prepare("
         SELECT 
-            t_books.book_id,
-            t_books.title,
-            t_books.description,
-            t_books.cover_image,
-            t_genres.genre_name
-        FROM t_books
+            table_books.book_id,
+            table_books.title,
+            table_books.description,
+            table_books.cover_image,
+            table_genres.genre_name
+        FROM table_books
         LEFT JOIN t_book_genres ON t_books.book_id = t_book_genres.book_id_fk
         LEFT JOIN t_genres ON t_book_genres.genre_id_fk = t_genres.genre_id
         WHERE (t_books.title LIKE ? OR t_genres.genre_name LIKE ?)

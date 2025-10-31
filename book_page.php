@@ -13,8 +13,8 @@ if (!empty($search)) {
                b.book_language, b.book_release_date, b.book_pages, b.book_price,
                g.genre_name
         FROM table_books b
-        LEFT JOIN table_genres g ON b.genre_fk = g.genre_id
-        WHERE (b.book_title LIKE :search OR g.genre_name LIKE :search) 
+        LEFT JOIN table_genres g ON b.book_id = g.genre_id
+        WHERE (b.book_title LIKE :search OR g.genre_name LIKE :search OR b.book_author LIKE :search) 
           AND b.status_fk = 1
         ORDER BY b.book_release_date DESC
         LIMIT 50
